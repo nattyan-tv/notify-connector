@@ -18,6 +18,8 @@ async def main_root(request: sanic.Request):
 
 @app.route("/notify")
 async def line_notify(request: sanic.Request):
+    if request.args.get("message") is None:
+        return sanic.reponse.json({"status":400, "message":"Message is None."})
     async with aiohttp.ClientSession() as session:
         async with session.post(URL, headers={"Authorization": f"Bearer {TOKEN}"} , data={"message": request.args.get("message")}) as response:
             print(response.status)
